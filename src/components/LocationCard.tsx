@@ -24,16 +24,39 @@ export default function LocationCard({ location, dateStr, entries, onAdd, onRemo
     const locationHasTiming = ['Antwerp', 'Diegem', 'Ghent'].includes(location);
 
     return (
-        <div className="bg-zinc-900/50 backdrop-blur-md rounded-2xl border border-white/5 overflow-hidden flex flex-col h-full shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div className="bg-zinc-900/50 backdrop-blur-md rounded-2xl border border-white/5 overflow-hidden flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
             <div className="bg-white/5 px-4 py-3 border-b border-white/5 flex items-center justify-between">
-                <h3 className="font-semibold text-zinc-200">{location}</h3>
-                <div className="text-xs font-medium text-zinc-500 bg-black/20 px-2 py-1 rounded-md">
-                    {entries.length}
+                <div className="flex items-center space-x-2">
+                    <h3 className="font-semibold text-zinc-200">{location}</h3>
+                    {(entries.length > 0) && (
+                        <div className="text-xs font-medium text-zinc-500 bg-black/20 px-2 py-0.5 rounded-full">
+                            {entries.length}
+                        </div>
+                    )}
                 </div>
+                {!hasCurrentUser && currentUser && (
+                    <button
+                        onClick={onAdd}
+                        className="flex items-center justify-center p-1.5 rounded-lg border border-dashed border-indigo-500/50 text-indigo-400 hover:text-white hover:border-indigo-400 hover:bg-indigo-500/20 transition-all text-xs font-medium group"
+                        title="Add me here"
+                    >
+                        <Plus className="w-4 h-4" />
+                    </button>
+                )}
             </div>
 
-            <div className="flex-1 p-3 flex flex-col gap-2 overflow-y-auto">
+            <div className="p-3 flex flex-col gap-2">
                 <AnimatePresence>
+                    {entries.length === 0 && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="text-center py-4 text-xs font-medium text-zinc-600"
+                        >
+                            Empty
+                        </motion.div>
+                    )}
                     {entries.map(entry => {
                         const isMe = entry.name === currentUser;
                         return (
@@ -94,17 +117,6 @@ export default function LocationCard({ location, dateStr, entries, onAdd, onRemo
                         );
                     })}
                 </AnimatePresence>
-
-                {!hasCurrentUser && currentUser && (
-                    <motion.button
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        onClick={onAdd}
-                        className="mt-auto flex items-center justify-center w-full py-2.5 rounded-xl border border-dashed border-white/20 text-zinc-400 hover:text-white hover:border-white/40 hover:bg-white/5 transition-all text-sm font-medium group"
-                    >
-                        <Plus className="w-4 h-4 mr-1.5 group-hover:scale-110 transition-transform" /> Add me here
-                    </motion.button>
-                )}
             </div>
         </div>
     );

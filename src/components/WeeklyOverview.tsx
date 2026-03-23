@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { format, addWeeks, subWeeks, startOfWeek, addDays } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import DayColumn from './DayColumn';
+import DayRow from './DayRow';
 import { OfficeEntry } from '@/lib/types';
 import { supabase } from '@/lib/supabase';
 import { motion } from 'framer-motion';
@@ -41,6 +41,11 @@ export default function WeeklyOverview() {
 
     const handlePreviousWeek = () => setCurrentDate(subWeeks(currentDate, 1));
     const handleNextWeek = () => setCurrentDate(addWeeks(currentDate, 1));
+    const handleToday = () => setCurrentDate(new Date());
+
+    const currentWeekStart = format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd');
+    const viewedWeekStart = format(dates[0], 'yyyy-MM-dd');
+    const isCurrentWeek = currentWeekStart === viewedWeekStart;
 
     // Optimistic UI updates
     const handleAddEntry = async (entry: OfficeEntry) => {
@@ -84,39 +89,53 @@ export default function WeeklyOverview() {
 
     return (
         <div className="flex flex-col flex-1 pb-10">
-            <div className="flex items-center justify-between mb-8 bg-zinc-900/50 backdrop-blur-xl border border-white/5 rounded-2xl p-4 shadow-2xl">
+            <div className="flex items-center justify-between mb-6 md:mb-8 bg-zinc-900/50 backdrop-blur-xl border border-white/5 rounded-2xl p-3 md:p-4 shadow-2xl">
                 <button
                     onClick={handlePreviousWeek}
-                    className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all transform hover:scale-105"
+                    className="p-1.5 md:p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all transform hover:scale-105"
                 >
-                    <ChevronLeft className="w-6 h-6" />
+                    <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
                 </button>
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold text-white tracking-tight">
-                        {format(dates[0], 'MMMM d')} - {format(dates[4], 'MMMM d, yyyy')}
+                <div className="flex flex-col items-center justify-center px-2">
+                    <h2 className="text-sm sm:text-base md:text-xl font-bold text-white tracking-tight whitespace-nowrap">
+                        {format(dates[0], 'MMM d')} - {format(dates[4], 'MMM d, yyyy')}
                     </h2>
-                    <p className="text-zinc-400 font-medium">Week {format(currentDate, 'w')}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                        <p className="text-xs md:text-sm text-zinc-400 font-medium">Week {format(currentDate, 'w')}</p>
+                        {!isCurrentWeek ? (
+                            <button
+                                onClick={handleToday}
+                                className="text-[10px] md:text-xs bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/40 hover:text-indigo-200 px-2 py-0.5 rounded transition-colors font-bold uppercase tracking-wider"
+                            >
+                                Back to current week
+                            </button>
+                        ) : (
+                            <span className="text-[10px] md:text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+                                Current Week
+                            </span>
+                        )}
+                    </div>
                 </div>
                 <button
                     onClick={handleNextWeek}
-                    className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all transform hover:scale-105"
+                    className="p-1.5 md:p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all transform hover:scale-105"
                 >
-                    <ChevronRight className="w-6 h-6" />
+                    <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
                 </button>
             </div>
 
             {isLoading ? (
-                <div className="flex-1 flex items-center justify-center">
+                <div className="flex-1 flex items-center justify-center min-h-[400px]">
                     <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
                 </div>
             ) : (
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="grid grid-cols-1 md:grid-cols-5 gap-4 lg:gap-6 flex-1 min-h-[600px]"
+                    className="flex flex-col gap-2 w-full"
                 >
                     {dates.map((date) => (
-                        <DayColumn
+                        <DayRow
                             key={date.toISOString()}
                             date={date}
                             entries={entries.filter(e => e.date === format(date, 'yyyy-MM-dd'))}

@@ -49,7 +49,9 @@ export default function ProfileSelector() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
+                className="flex flex-col items-center"
             >
+                <img src="/logo.png" alt="Studio+" className="h-12 md:h-16 mb-8 drop-shadow-lg object-contain" />
                 <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 drop-shadow-lg">
                     Who is checking in?
                 </h1>

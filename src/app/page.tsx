@@ -32,16 +32,20 @@ export default function Home() {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="w-full flex-1 flex flex-col"
           >
-            <div className="flex justify-between items-center mb-8 bg-zinc-900/40 p-4 rounded-2xl border border-white/5 backdrop-blur-md shadow-xl">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white shadow-lg ring-2 ring-indigo-500/50" style={{
-                  background: `hsl(${Math.abs(currentUser.split('').reduce((a, b) => a + b.charCodeAt(0), 0)) % 360}, 70%, 60%)`
-                }}>
-                  {currentUser.substring(0, 2).toUpperCase()}
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-white">Welcome, {currentUser}</h2>
-                  <p className="text-sm text-zinc-400">Plan your weekly office presence</p>
+            <div className="flex justify-between items-center mb-8 bg-zinc-900/40 p-4 rounded-2xl border border-white/5 backdrop-blur-md shadow-xl flex-wrap gap-4">
+              <div className="flex items-center flex-wrap gap-4 sm:gap-6">
+                <img src="/logo.png" alt="Studio+" className="h-8 md:h-10 object-contain ml-2" />
+                <div className="hidden sm:block w-px h-10 bg-white/10"></div>
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white shadow-lg ring-2 ring-indigo-500/50" style={{
+                    background: `hsl(${Math.abs(currentUser.split('').reduce((a, b) => a + b.charCodeAt(0), 0)) % 360}, 70%, 60%)`
+                  }}>
+                    {currentUser.substring(0, 2).toUpperCase()}
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-white">Welcome, {currentUser}</h2>
+                    <p className="text-sm text-zinc-400">Plan your weekly office presence</p>
+                  </div>
                 </div>
               </div>
               <button
