@@ -1,27 +1,27 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { DynamicBackground } from "@/components/DynamicBackground";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Studio+ Office Locations",
-  description: "EY Studio Weekly Office Planner",
+  title: 'Studio+ Office Locations',
+  description: 'Weekly flexible office locations for Studio+',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body className="antialiased font-sans bg-[#050505] text-white">
-        <DynamicBackground />
-        <div className="relative z-10">
+    <html lang="en" className="dark">
+      <body className={`${inter.className} min-h-screen relative overflow-x-hidden bg-zinc-950 text-zinc-100`}>
+        <div className="fixed inset-0 pointer-events-none bg-mesh z-0"></div>
+        <div className="relative z-10 min-h-screen flex flex-col">
           {children}
         </div>
       </body>
     </html>
   );
 }
-
-

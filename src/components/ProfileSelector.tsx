@@ -1,72 +1,86 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { USERS, getInitials, getUserColor } from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
+import { useAppStore } from '@/lib/store';
+import { motion } from 'framer-motion';
 
-export function ProfileSelector() {
-    const router = useRouter();
-    const [mounted, setMounted] = useState(false);
+export const USERS = [
+    "Alexandra", "Anne-Sophie", "Brent", "Bruno", "David", "Eline", "Ellen",
+    "Ghizlane", "Hanne", "Kevin", "Laura", "Margaux", "Margot", "Marie",
+    "Mathilde", "Mathieu", "Michael", "Nurya", "Robbe", "Seb", "Seppe",
+    "Simon", "Sofia", "Sofie"
+];
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+export const getInitials = (name: string) => {
+    if (name.includes('-')) {
+        const parts = name.split('-');
+        return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
+    }
+    return name.substring(0, 2).toUpperCase();
+};
 
-    const handleSelectProfile = (user: string) => {
-        localStorage.setItem('studioplus_user', user);
-        router.push('/planner');
+export const stringToColor = (str: string) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const h = Math.abs(hash) % 360;
+    return `hsl(${h}, 70%, 60%)`;
+};
+
+export default function ProfileSelector() {
+    const setCurrentUser = useAppStore((state) => state.setCurrentUser);
+
+    const container = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: { staggerChildren: 0.05 }
+        }
     };
 
-    if (!mounted) return null;
+    const item = {
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0 }
+    };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-6 md:p-12">
+        <div className="flex flex-col items-center justify-center min-h-[80vh] w-full px-4 py-12 text-center">
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="w-full max-w-4xl text-center mb-16 flex flex-col items-center"
+                transition={{ duration: 0.5 }}
             >
-                <Image
-                    src="/assets/logo.webp"
-                    alt="Studio+ Logo"
-                    width={300}
-                    height={150}
-                    className="mb-6 drop-shadow-[0_0_20px_rgba(255,230,0,0.3)] h-auto w-auto max-w-[200px] sm:max-w-[300px]"
-                    priority
-                />
-                <p className="text-ey-grey uppercase tracking-[0.4em] text-[10px] font-black opacity-60">
-                    Project Identity
+                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 drop-shadow-lg">
+                    Who is checking in?
+                </h1>
+                <p className="text-zinc-400 text-lg md:text-xl font-medium mb-12 max-w-2xl mx-auto">
+                    Select your profile to view and update your weekly office schedule.
                 </p>
             </motion.div>
 
             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.1 }}
-                className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 sm:gap-8 w-full max-w-5xl"
+                variants={container}
+                initial="hidden"
+                animate="show"
+                className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6 md:gap-8 max-w-6xl mx-auto"
             >
-                {USERS.map((user, index) => (
+                {USERS.map((name) => (
                     <motion.button
-                        key={user}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.02 * index }}
-                        whileHover={{ scale: 1.05, y: -5 }}
+                        key={name}
+                        variants={item}
+                        whileHover={{ scale: 1.1, translateY: -5 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => handleSelectProfile(user)}
-                        className="flex flex-col items-center group"
+                        onClick={() => setCurrentUser(name)}
+                        className="flex flex-col items-center group focus:outline-none"
                     >
                         <div
-                            className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border flex items-center justify-center text-white font-black text-2xl sm:text-3xl mb-3 transition-all duration-300 ey-shadow shadow-[0_0_20px_rgba(255,255,255,0.05)] group-hover:border-white/40"
-                            style={{ backgroundColor: `${getUserColor(user)}22`, borderColor: `${getUserColor(user)}44` }}
+                            className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-xl md:text-2xl font-bold text-white shadow-lg group-hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] transition-all duration-300 ring-2 ring-white/10 group-hover:ring-white/50"
+                            style={{ backgroundColor: stringToColor(name) }}
                         >
-                            <span style={{ color: getUserColor(user) }}>{getInitials(user)}</span>
+                            {getInitials(name)}
                         </div>
-                        <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-white/50 group-hover:text-white transition-colors truncate w-full text-center px-1">
-                            {user}
+                        <span className="mt-3 text-sm md:text-base font-semibold text-zinc-400 group-hover:text-white transition-colors">
+                            {name}
                         </span>
                     </motion.button>
                 ))}

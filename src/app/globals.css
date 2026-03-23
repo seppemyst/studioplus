@@ -1,57 +1,35 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ey-yellow: #FFE600;
-  --color-ey-black: #000000;
-  --color-ey-dark-grey: #1A1A1A;
-  --color-ey-grey: #404040;
-  --color-ey-light-grey: #262626;
-
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
 }
 
-:root {
-  --background: #050505;
-  --foreground: #FFFFFF;
+@layer base {
+  body {
+    @apply bg-zinc-950 text-zinc-50 antialiased min-h-screen selection:bg-indigo-500/30;
+  }
 }
 
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-}
-
-.glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.ey-shadow {
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-}
-
-@keyframes gradientMove {
+/* Futuristic animated gradient */
+@keyframes mesh {
   0% {
-    transform: translate(0, 0) scale(1);
+    background-position: 0% 50%;
   }
-
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
+  50% {
+    background-position: 100% 50%;
   }
-
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-
   100% {
-    transform: translate(0, 0) scale(1);
+    background-position: 0% 50%;
   }
 }
 
-.animate-blob {
-  animation: gradientMove 15s infinite alternate ease-in-out;
+.bg-mesh {
+  background: radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.2), transparent 40%),
+              radial-gradient(circle at 85% 30%, rgba(20, 184, 166, 0.2), transparent 40%),
+              radial-gradient(circle at 50% 80%, rgba(217, 70, 239, 0.2), transparent 40%),
+              linear-gradient(to bottom right, #09090b, #18181b);
+  background-size: 200% 200%;
+  animation: mesh 20s ease-in-out infinite;
+  background-attachment: fixed;
 }
