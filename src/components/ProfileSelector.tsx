@@ -3,29 +3,9 @@
 import { useAppStore } from '@/lib/store';
 import { motion } from 'framer-motion';
 
-export const USERS = [
-    "Alexandra", "Anne-Sophie", "Brent", "Bruno", "David", "Eline", "Ellen",
-    "Ghizlane", "Hanne", "Kevin", "Laura", "Margaux", "Margot", "Marie",
-    "Mathilde", "Mathieu", "Michael", "Nurya", "Robbe", "Seb", "Seppe",
-    "Simon", "Sofia", "Sofie"
-];
+import { USERS, getInitials } from '@/lib/constants';
 
-export const getInitials = (name: string) => {
-    if (name.includes('-')) {
-        const parts = name.split('-');
-        return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
-    }
-    return name.substring(0, 2).toUpperCase();
-};
-
-export const stringToColor = (str: string) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const h = Math.abs(hash) % 360;
-    return `hsl(${h}, 70%, 60%)`;
-};
+import { getUserColor } from '@/lib/constants';
 
 export default function ProfileSelector() {
     const setCurrentUser = useAppStore((state) => state.setCurrentUser);
@@ -77,7 +57,7 @@ export default function ProfileSelector() {
                     >
                         <div
                             className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-xl md:text-2xl font-bold text-white shadow-lg group-hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] transition-all duration-300 ring-2 ring-white/10 group-hover:ring-white/50"
-                            style={{ backgroundColor: stringToColor(name) }}
+                            style={{ backgroundColor: getUserColor(name) }}
                         >
                             {getInitials(name)}
                         </div>

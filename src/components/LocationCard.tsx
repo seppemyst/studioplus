@@ -2,7 +2,7 @@
 
 import { useAppStore } from '@/lib/store';
 import { OfficeEntry, LocationName, TimingChoice } from '@/lib/types';
-import { getInitials, stringToColor } from './ProfileSelector';
+import { getInitials, getUserColor } from '@/lib/constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X, Clock } from 'lucide-react';
 
@@ -73,7 +73,7 @@ export default function LocationCard({ location, dateStr, entries, onAdd, onRemo
                                     <div className="flex items-center space-x-3">
                                         <div
                                             className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm ring-1 ring-white/10"
-                                            style={{ backgroundColor: stringToColor(entry.name) }}
+                                            style={{ backgroundColor: getUserColor(entry.name) }}
                                         >
                                             {getInitials(entry.name)}
                                         </div>
