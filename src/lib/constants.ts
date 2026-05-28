@@ -6,6 +6,7 @@ export const USERS_DATA = [
     { name: "David", color: "#FF10F0" },
     { name: "Eline", color: "#FFDF00" },
     { name: "Ellen", color: "#00FF7F" },
+    { name: "Emir", color: "#FF3366" },
     { name: "Ghizlane", color: "#FF007F" },
     { name: "Hanne", color: "#7F00FF" },
     { name: "Kevin", color: "#007FFF" },
