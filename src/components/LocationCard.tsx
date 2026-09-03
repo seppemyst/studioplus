@@ -19,6 +19,7 @@ const TIMINGS: TimingChoice[] = ['Full Day', 'Morning', 'Afternoon'];
 
 export default function LocationCard({ location, dateStr, entries, onAdd, onRemove, onUpdateTiming }: LocationCardProps) {
     const currentUser = useAppStore(state => state.currentUser);
+    const users = useAppStore(state => state.users);
 
     const hasCurrentUser = entries.some(e => e.name === currentUser);
     const locationHasTiming = ['Antwerp', 'Diegem', 'Ghent'].includes(location);
@@ -73,7 +74,7 @@ export default function LocationCard({ location, dateStr, entries, onAdd, onRemo
                                     <div className="flex items-center space-x-3">
                                         <div
                                             className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm ring-1 ring-white/10"
-                                            style={{ backgroundColor: getUserColor(entry.name) }}
+                                            style={{ backgroundColor: getUserColor(entry.name, users) }}
                                         >
                                             {getInitials(entry.name)}
                                         </div>

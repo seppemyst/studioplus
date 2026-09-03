@@ -4,10 +4,12 @@ import { useAppStore } from '@/lib/store';
 import ProfileSelector from '@/components/ProfileSelector';
 import WeeklyOverview from '@/components/WeeklyOverview';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getUserColor, getInitials } from '@/lib/constants';
 
 export default function Home() {
   const currentUser = useAppStore((state) => state.currentUser);
   const setCurrentUser = useAppStore((state) => state.setCurrentUser);
+  const users = useAppStore((state) => state.users);
 
   return (
     <main className="flex-1 w-full max-w-7xl mx-auto flex flex-col pt-8 pb-12 px-4 relative">
@@ -38,9 +40,9 @@ export default function Home() {
                 <div className="hidden sm:block w-px h-10 bg-white/10"></div>
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white shadow-lg ring-2 ring-indigo-500/50" style={{
-                    background: `hsl(${Math.abs(currentUser.split('').reduce((a, b) => a + b.charCodeAt(0), 0)) % 360}, 70%, 60%)`
+                    backgroundColor: getUserColor(currentUser, users)
                   }}>
-                    {currentUser.substring(0, 2).toUpperCase()}
+                    {getInitials(currentUser)}
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-white">Welcome, {currentUser}</h2>

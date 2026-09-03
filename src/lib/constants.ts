@@ -29,8 +29,29 @@ export const USERS_DATA = [
 
 export const USERS = USERS_DATA.map(u => u.name);
 
-export function getUserColor(name: string) {
-    return USERS_DATA.find(u => u.name === name)?.color || "#FFFFFF";
+export const PALETTE = [
+    "#FF5F1F", "#39FF14", "#BC13FE", "#00FFFF", "#FF10F0",
+    "#FFDF00", "#00FF7F", "#FF3366", "#FF007F", "#7F00FF",
+    "#007FFF", "#FFBF00", "#8B00FF", "#00CED1", "#FF69B4",
+    "#ADFF2F", "#FF4500", "#1E90FF", "#DA70D6", "#F08080",
+    "#32CD32", "#FF8C00", "#9400D3", "#00FA9A", "#FF1493",
+    "#00BFFF", "#E11D48", "#10B981", "#6366F1", "#EC4899"
+];
+
+export function generateUserColor(name: string): string {
+    if (!name) return "#6366F1";
+    const hash = Math.abs(name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0));
+    return PALETTE[hash % PALETTE.length];
+}
+
+export function getUserColor(name: string, customUsers?: { name: string; color: string }[]): string {
+    if (customUsers) {
+        const foundCustom = customUsers.find(u => u.name.toLowerCase() === name.toLowerCase());
+        if (foundCustom) return foundCustom.color;
+    }
+    const found = USERS_DATA.find(u => u.name.toLowerCase() === name.toLowerCase());
+    if (found) return found.color;
+    return generateUserColor(name);
 }
 
 
